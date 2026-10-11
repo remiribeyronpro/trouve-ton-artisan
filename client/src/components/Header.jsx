@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import logo from "../assets/Logo.png";
+import { api } from "../services/api";
 
 export default function Header() {
   const [categories, setCategories] = useState([]);
@@ -16,29 +17,22 @@ export default function Header() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const controller = new AbortController();
+    let active = true;
 
     async function loadCategories() {
       try {
-        const response = await fetch(
-          "http://localhost:3001/api/categories",
-          { signal: controller.signal }
-        );
-
-        if (!response.ok) {
-          throw new Error("Impossible de charger les catégories.");
-        }
-
-        const data = await response.json();
+        const data = await api.categories();
 
         if (!Array.isArray(data)) {
           throw new Error("Format des catégories invalide.");
         }
 
-        setCategories(data);
-        setError("");
+        if (active) {
+          setCategories(data);
+          setError("");
+        }
       } catch (err) {
-        if (err.name !== "AbortError") {
+        if (active) {
           console.error("Erreur catégories :", err);
           setError("Catégories indisponibles.");
         }
@@ -47,7 +41,9 @@ export default function Header() {
 
     loadCategories();
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, []);
 
   function submit(e) {
@@ -56,16 +52,13 @@ export default function Header() {
     const q = search.trim();
 
     if (q) {
-      navigate(
-        `/artisans?search=${encodeURIComponent(q)}`
-      );
+      navigate(`/artisans?search=${encodeURIComponent(q)}`);
     }
   }
 
   return (
     <header className="site-header">
       <div className="container header-top">
-
         <Link
           to="/"
           className="brand"
@@ -108,7 +101,6 @@ export default function Header() {
         aria-label="Catégories d'artisans"
       >
         <div className="container nav-scroll">
-
           <NavLink to="/" end>
             Accueil
           </NavLink>
@@ -121,7 +113,6 @@ export default function Header() {
               {category.nom}
             </NavLink>
           ))}
-
         </div>
       </nav>
 
