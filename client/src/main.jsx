@@ -1,12 +1,18 @@
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/main.scss";
-import App from "./App";
 
+import App from "./App.jsx";
+
+// Styles globaux
+import "./styles/main.scss";
+
+// Initialisation de l'application React
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter><App /></BrowserRouter>
+    <BrowserRouter basename="/site">
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );

@@ -1,84 +1,532 @@
-$blue:#0074c7;
-$dark-blue:#00497c;
-$red:#cd2c2e;
-$green:#82b864;
-$bg:#f1f8fc;
-$text:#384050;
-$white:#fff;
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;color:$text;background:$white;line-height:1.6}
-a{color:$dark-blue}
-.skip-link{position:absolute;left:-9999px;top:0;background:$dark-blue;color:white;padding:.7rem 1rem;z-index:999}
-.skip-link:focus{left:1rem;top:1rem}
-.container{max-width:1160px}
-.site-header{background:$white;box-shadow:0 2px 12px rgba(0,0,0,.08);position:relative;z-index:5}
-.header-top{display:flex;align-items:center;justify-content:space-between;gap:2rem;padding-top:1rem;padding-bottom:1rem}
-.brand img{width:190px;max-height:75px;object-fit:contain}
-.search-form{display:flex;width:min(100%,520px)}
-.search-form input{flex:1;border:1px solid #b7c2ca;border-radius:8px 0 0 8px;padding:.8rem 1rem;min-width:0}
-.search-form button,.btn-primary{background:$dark-blue!important;border-color:$dark-blue!important;color:white!important}
-.search-form button{border:0;border-radius:0 8px 8px 0;padding:0 1rem}
-.category-nav{background:$dark-blue}
-.nav-scroll{display:flex;gap:.2rem;overflow:auto}
-.category-nav a{color:white;text-decoration:none;padding:.85rem 1rem;white-space:nowrap;border-bottom:3px solid transparent}
-.category-nav a:hover,.category-nav a.active{background:rgba(255,255,255,.1);border-bottom-color:$green}
-.hero{background:linear-gradient(120deg,$dark-blue,$blue);color:white;padding:5rem 0}
-.hero h1{font-size:clamp(2.2rem,5vw,4.5rem);max-width:850px;font-weight:800;line-height:1.05}
-.hero p:not(.eyebrow){font-size:1.2rem;max-width:700px}
-.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:.78rem;color:$blue;margin-bottom:.5rem}
-.hero .eyebrow{color:#d9efff}
-.section{padding-top:4.5rem;padding-bottom:4.5rem}
-.section-soft{background:$bg}
-.section-heading{margin-bottom:2rem}
-.section h1,.section h2{color:#202a35;font-weight:800}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
-.step{border-top:5px solid $blue;padding:1.4rem;background:$bg;border-radius:0 0 10px 10px}
-.step span{font-size:2rem;font-weight:900;color:$red}
-.step h3{font-size:1.05rem;font-weight:800;margin-top:.5rem}
-.artisan-card{background:white;border:1px solid #dce5eb;border-radius:12px;box-shadow:0 8px 22px rgba(0,73,124,.08);transition:.2s}
-.artisan-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,73,124,.14)}
-.artisan-card__body{padding:1.5rem}
-.artisan-card h3{font-weight:800;color:#202a35}
-.rating{display:flex;gap:.7rem;align-items:center;color:#e3a008;margin:.7rem 0}
-.rating strong{color:$text;font-size:.9rem}
-.location{font-weight:600}
-.btn{border-radius:7px;padding:.7rem 1rem;font-weight:700}
-.detail-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:4rem;align-items:start}
-.contact-card{background:$bg;padding:2rem;border-radius:14px;border-top:6px solid $red}
-.contact-card form{display:grid;gap:.55rem}
-.contact-card label{font-weight:700;margin-top:.4rem}
-.contact-card input,.contact-card textarea{width:100%;border:1px solid #aebbc4;border-radius:7px;padding:.75rem;background:white}
-.form-status{margin-top:1rem;font-weight:700}
-.external-link{font-weight:800}
-.empty-state{background:$bg;border-left:5px solid $blue;padding:2rem;margin-top:2rem}
-.not-found{text-align:center}
-.error-code{font-size:6rem;font-weight:900;color:$red;line-height:1;margin:0}
-.site-footer{background:#202a35;color:white;padding:3rem 0;margin-top:auto}
-.footer-grid{display:flex;justify-content:space-between;gap:3rem}
-.footer-logo{width:180px;background:white;padding:.5rem;margin-bottom:1rem}
-.site-footer nav{display:flex;flex-direction:column;gap:.7rem}
-.site-footer a{color:white}
-@media(max-width:800px){
- .header-top{align-items:stretch;flex-direction:column}
- .brand img{width:160px}
- .search-form{width:100%}
- .steps{grid-template-columns:1fr 1fr}
- .detail-grid{grid-template-columns:1fr;gap:2rem}
- .footer-grid{flex-direction:column}
-}
-@media(max-width:520px){
- .steps{grid-template-columns:1fr}
- .hero{padding:3.5rem 0}
- .section{padding-top:3rem;padding-bottom:3rem}
-}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
-:focus-visible{outline:3px solid #ffcc00;outline-offset:3px}
+/* ==========================================
+   TROUVE TON ARTISAN !
+   Feuille de styles principale
+========================================== */
 
-/* Pages d'informations légales */
+/* 1. Variables */
+
+$blue: #0074c7;
+$dark-blue: #00497c;
+$red: #cd2c2e;
+$green: #82b864;
+$bg: #f1f8fc;
+$text: #384050;
+$white: #ffffff;
+$heading: #202a35;
+
+/* 2. Styles globaux */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: $text;
+  background: $white;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: $dark-blue;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: $heading;
+  line-height: 1.25;
+}
+
+p {
+  margin-top: 0;
+}
+
+/* 3. Conteneur principal */
+
+.container {
+  width: 100%;
+  max-width: 1160px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* 4. Accessibilité */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: 12px 16px;
+  color: $white;
+  background: $dark-blue;
+}
+
+.skip-link:focus {
+  left: 16px;
+  top: 16px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+:focus-visible {
+  outline: 3px solid #ffcc00;
+  outline-offset: 3px;
+}
+
+/* 5. En-tête */
+
+.site-header {
+  position: relative;
+  z-index: 5;
+  background: $white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 120px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.brand img {
+  display: block;
+  width: 190px;
+  max-height: 85px;
+  object-fit: contain;
+}
+
+/* 6. Recherche */
+
+.search-form {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 520px;
+}
+
+.search-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 16px;
+  border: 1px solid #b7c2ca;
+  border-radius: 8px 0 0 8px;
+  background: $white;
+  color: $text;
+}
+
+.search-form input:focus {
+  border-color: $blue;
+}
+
+.search-form button {
+  padding: 12px 20px;
+  border: 1px solid $dark-blue;
+  border-radius: 0 8px 8px 0;
+  background: $dark-blue;
+  color: $white;
+  font-weight: 700;
+  transition: background 0.2s ease;
+}
+
+.search-form button:hover {
+  background: $blue;
+}
+
+/* 7. Navigation des catégories */
+
+.category-nav {
+  width: 100%;
+  background: $dark-blue;
+}
+
+.nav-scroll {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.category-nav a {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 16px;
+  color: $white;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: background 0.2s ease;
+}
+
+.category-nav a:hover,
+.category-nav a.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom-color: $green;
+}
+
+/* 8. Bannière d'accueil */
+
+.hero {
+  width: 100%;
+  padding: 80px 0;
+  background: linear-gradient(120deg, $dark-blue, $blue);
+  color: $white;
+}
+
+.hero .container {
+  width: 100%;
+}
+
+.hero h1 {
+  max-width: 850px;
+  margin: 20px 0 32px;
+  color: $white;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.hero p:not(.eyebrow) {
+  max-width: 700px;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: $blue;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero .eyebrow {
+  color: #d9efff;
+}
+
+/* 9. Sections */
+
+.section {
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+.section-soft {
+  background: $bg;
+}
+
+.section-heading {
+  margin-bottom: 32px;
+}
+
+.section-heading h2 {
+  margin: 8px 0 0;
+  color: $heading;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+}
+
+.section h1,
+.section h2 {
+  color: $heading;
+  font-weight: 800;
+}
+
+/* 10. Étapes de fonctionnement */
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.step {
+  min-width: 0;
+  padding: 24px;
+  border-top: 5px solid $blue;
+  border-radius: 0 0 10px 10px;
+  background: $bg;
+}
+
+.step span {
+  display: block;
+  margin-bottom: 12px;
+  color: $red;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.step h3 {
+  margin: 0 0 12px;
+  color: $heading;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.step p {
+  margin: 0;
+}
+
+/* 11. Grilles et cartes artisans */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.row > * {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.g-4 {
+  row-gap: 24px;
+}
+
+.col-md-4 {
+  min-width: 0;
+}
+
+.artisan-card {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #dce5eb;
+  border-radius: 12px;
+  background: $white;
+  box-shadow: 0 8px 22px rgba(0, 73, 124, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.artisan-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 73, 124, 0.14);
+}
+
+.artisan-card__body {
+  padding: 24px;
+}
+
+.artisan-card h3 {
+  margin-top: 0;
+  color: $heading;
+  font-weight: 800;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 12px 0;
+  color: #e3a008;
+}
+
+.rating strong {
+  color: $text;
+  font-size: 0.9rem;
+}
+
+.location {
+  font-weight: 600;
+}
+
+/* 12. Boutons */
+
+.btn {
+  display: inline-block;
+  padding: 11px 16px;
+  border-radius: 7px;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+
+.btn-primary {
+  border: 1px solid $dark-blue !important;
+  background: $dark-blue !important;
+  color: $white !important;
+}
+
+.btn-primary:hover {
+  background: $blue !important;
+  border-color: $blue !important;
+}
+
+/* 13. Fiche artisan */
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: start;
+  gap: 48px;
+}
+
+.detail-grid > * {
+  min-width: 0;
+}
+
+.contact-card {
+  padding: 32px;
+  border-top: 6px solid $red;
+  border-radius: 14px;
+  background: $bg;
+}
+
+.contact-card form {
+  display: grid;
+  gap: 10px;
+}
+
+.contact-card label {
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+.contact-card input,
+.contact-card textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #aebbc4;
+  border-radius: 7px;
+  background: $white;
+  color: $text;
+}
+
+.contact-card textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.form-status {
+  margin-top: 16px;
+  font-weight: 700;
+}
+
+.external-link {
+  overflow-wrap: anywhere;
+  font-weight: 800;
+}
+
+/* 14. Messages et résultats vides */
+
+.empty-state {
+  margin-top: 32px;
+  padding: 32px;
+  border-left: 5px solid $blue;
+  background: $bg;
+}
+
+/* 15. Pied de page */
+
+.site-footer {
+  margin-top: auto;
+  padding: 48px 0;
+  background: $heading;
+  color: $white;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 48px;
+}
+
+.footer-grid > * {
+  min-width: 0;
+}
+
+.footer-logo {
+  display: block;
+  width: 180px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: $white;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.site-footer a {
+  color: $white;
+}
+
+/* 16. Pages légales */
 
 .legal-page {
+  width: 100%;
   max-width: 1100px;
 }
 
@@ -93,26 +541,154 @@ a{color:$dark-blue}
 }
 
 .legal-section {
-  background-color: #f0f8fc;
-  border-left: 4px solid #0074c7;
-  border-radius: 0 10px 10px 0;
   padding: 25px 30px;
+  border-left: 4px solid $blue;
+  border-radius: 0 10px 10px 0;
+  background: #f0f8fc;
 }
 
 .legal-section h2 {
-  color: #202a35;
-  font-size: 1.35rem;
   margin: 0 0 12px;
+  color: $heading;
+  font-size: 1.35rem;
 }
 
 .legal-section p {
+  margin: 0;
   color: #384454;
   font-size: 1rem;
   line-height: 1.7;
-  margin: 0;
 }
 
-@media (max-width: 768px) {
+/* 17. Page 404 */
+
+.not-found {
+  text-align: center;
+}
+
+.error-code {
+  margin: 0;
+  color: $red;
+  font-size: clamp(4rem, 12vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.not-found-image {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 24px auto;
+}
+
+/* 18. Responsive : tablette */
+
+@media (min-width: 768px) {
+  .col-md-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+}
+
+@media (max-width: 800px) {
+  .header-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .brand img {
+    width: 160px;
+  }
+
+  .search-form {
+    max-width: 100%;
+  }
+
+  .hero {
+    padding: 64px 0;
+  }
+
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .footer-grid {
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+/* 19. Responsive : mobile */
+
+@media (max-width: 520px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .header-top {
+    min-height: auto;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .brand img {
+    width: 150px;
+  }
+
+  .search-form input {
+    padding: 10px;
+  }
+
+  .search-form button {
+    padding: 10px 12px;
+  }
+
+  .category-nav a {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .hero {
+    padding: 56px 0;
+  }
+
+  .hero h1 {
+    margin-bottom: 24px;
+  }
+
+  .hero p:not(.eyebrow) {
+    font-size: 1rem;
+  }
+
+  .section {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    padding: 20px;
+  }
+
+  .artisan-card__body {
+    padding: 20px;
+  }
+
+  .contact-card {
+    padding: 20px;
+  }
+
   .legal-page h1 {
     margin-bottom: 25px;
   }
@@ -132,16 +708,20 @@ a{color:$dark-blue}
   .legal-section p {
     font-size: 0.95rem;
   }
+
+  .site-footer {
+    padding: 36px 0;
+  }
 }
 
-.not-found {
-  text-align: center;
-}
+/* 20. Réduction des animations */
 
-.not-found-image {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  height: auto;
-  margin: 24px auto;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
 }

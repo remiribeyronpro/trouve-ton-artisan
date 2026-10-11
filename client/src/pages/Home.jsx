@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import ArtisanCard from "../components/ArtisanCard";
+import { api } from "../services/api";
 
 export default function Home() {
   const [top, setTop] = useState([]);
@@ -8,38 +9,27 @@ export default function Home() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const controller = new AbortController();
+    let active = true;
 
     async function fetchTopArtisans() {
       try {
-        const response = await fetch(
-          "http://localhost:3001/api/artisans",
-          { signal: controller.signal }
-        );
-
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement des artisans.");
-        }
-
-        const artisans = await response.json();
+        const artisans = await api.topArtisans();
 
         if (!Array.isArray(artisans)) {
           throw new Error("Format des données invalide.");
         }
 
-        const artisansDuMois = artisans
-          .filter((artisan) => artisan.top === true)
-          .slice(0, 3);
-
-        setTop(artisansDuMois);
-        setError("");
+        if (active) {
+          setTop(artisans.slice(0, 3));
+          setError("");
+        }
       } catch (err) {
-        if (err.name !== "AbortError") {
-          console.error(err);
+        if (active) {
+          console.error("Erreur artisans du mois :", err);
           setError("Impossible de charger les artisans du mois.");
         }
       } finally {
-        if (!controller.signal.aborted) {
+        if (active) {
           setLoading(false);
         }
       }
@@ -47,18 +37,32 @@ export default function Home() {
 
     fetchTopArtisans();
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+    };
   }, []);
 
   const steps = [
-    ["01", "Choisir une catégorie",
-      "Sélectionnez le domaine qui correspond à votre besoin."],
-    ["02", "Choisir un artisan",
-      "Comparez les professionnels proposés."],
-    ["03", "Consulter sa fiche",
-      "Découvrez sa note, sa spécialité et sa présentation."],
-    ["04", "Le contacter",
-      "Envoyez votre demande grâce au formulaire de contact."]
+    [
+      "01",
+      "Choisir une catégorie",
+      "Sélectionnez le domaine qui correspond à votre besoin."
+    ],
+    [
+      "02",
+      "Choisir un artisan",
+      "Comparez les professionnels proposés."
+    ],
+    [
+      "03",
+      "Consulter sa fiche",
+      "Découvrez sa note, sa spécialité et sa présentation."
+    ],
+    [
+      "04",
+      "Le contacter",
+      "Envoyez votre demande grâce au formulaire de contact."
+    ]
   ];
 
   return (
@@ -66,7 +70,9 @@ export default function Home() {
       <section className="hero">
         <div className="container">
           <p className="eyebrow">Auvergne-Rhône-Alpes</p>
+
           <h1>Trouvez l'artisan qu'il vous faut</h1>
+
           <p>
             Découvrez des professionnels de la région,
             consultez leur fiche et contactez-les simplement.

@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import path from "node:path";
+import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 import "dotenv/config";
 
@@ -15,15 +16,22 @@ import {
 } from "./middleware/errorHandler.js";
 
 const app = express();
-
 const port = Number(process.env.PORT || 3001);
 
-// Chemin vers les fichiers React compilés
+// Répertoire du serveur
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const clientDist = path.resolve(__dirname, "../client/dist");
 
-// Origines autorisées
+// Emplacement des fichiers React
+// En local : client/dist
+// Sur alwaysdata : chemin défini dans CLIENT_DIST
+const clientDist = process.env.CLIENT_DIST
+  ? path.resolve(process.env.CLIENT_DIST)
+  : path.resolve(__dirname, "../client/dist");
+
+const indexHtml = path.join(clientDist, "index.html");
+
+// Origines autorisées pour les requêtes CORS
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174"
@@ -33,11 +41,12 @@ if (process.env.CLIENT_URL) {
   allowedOrigins.push(
     ...process.env.CLIENT_URL
       .split(",")
-      .map((origin) => origin.trim())
+      .map(origin => origin.trim())
       .filter(Boolean)
   );
 }
 
+// Sécurité
 app.disable("x-powered-by");
 
 app.use(helmet());
@@ -65,39 +74,51 @@ app.get("/health", (req, res) => {
   });
 });
 
-// API : conserver ces routes avant React
+// Routes API
 app.use("/api", api);
 
-// Fichiers statiques du frontend React
-app.use(express.static(clientDist));
-
-// Les routes API inconnues restent en erreur 404
+// Routes API inconnues : erreur 404
 app.use("/api", notFound);
 
-// Permettre à React de gérer ses propres URLs
+// Fichiers statiques React
+app.use(express.static(clientDist));
+
+// Navigation React : renvoyer index.html
+// Uniquement pour les requêtes GET HTML
 app.get("*", (req, res, next) => {
-  res.sendFile(
-    path.join(clientDist, "index.html"),
-    (error) => {
-      if (error) next(error);
-    }
-  );
+  if (!req.accepts("html")) {
+    return next();
+  }
+
+  res.sendFile(indexHtml, error => {
+    if (error) next(error);
+  });
 });
 
-// Gestion des erreurs
+// Autres routes inconnues
+app.use(notFound);
+
+// Gestion centralisée des erreurs
 app.use(errorHandler);
 
-// Connexion à MySQL et démarrage
+// Connexion MySQL et démarrage du serveur
 async function startServer() {
   try {
     await sequelize.authenticate();
 
     console.log("Connexion MySQL réussie !");
 
-    app.listen(port, () => {
-      console.log(
-        `Serveur démarré sur le port ${port}`
+    if (fs.existsSync(indexHtml)) {
+      console.log("Frontend React trouvé :", clientDist);
+    } else {
+      console.warn(
+        "ATTENTION : index.html introuvable dans",
+        clientDist
       );
+    }
+
+    app.listen(port, () => {
+      console.log(`Serveur démarré sur le port ${port}`);
     });
   } catch (error) {
     console.error(
