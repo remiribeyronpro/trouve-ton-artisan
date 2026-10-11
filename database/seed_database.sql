@@ -1,4 +1,4 @@
-USE trouve_ton_artisan;
+USE chercheartisan_trouve_ton_artisan;
 
 INSERT INTO categories (nom) VALUES ('Alimentation');
 INSERT INTO categories (nom) VALUES ('Bâtiment');
