@@ -1,0 +1,39 @@
+
+# Dépendances Node.js
+node_modules/
+**/node_modules/
+
+# Variables d'environnement
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Fichiers générés par Vite
+dist/
+**/dist/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Couverture de tests
+coverage/
+**/coverage/
+
+# Fichiers temporaires
+*.tmp
+*.bak

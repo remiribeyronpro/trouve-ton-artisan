@@ -1,0 +1,15 @@
+# Checklist avant remise
+- [x] Structure React / Bootstrap / Sass
+- [x] API Node.js / Express
+- [x] Sequelize
+- [x] MySQL/MariaDB + scripts création/alimentation
+- [x] 17 artisans du fichier fourni
+- [x] 3 artisans du mois
+- [x] Catégories / recherche / fiche artisan / contact / 404
+- [x] Responsive et mesures d'accessibilité
+- [x] Mesures de sécurité
+- [x] README
+- [ ] Créer les maquettes Figma et ajouter le lien au rapport
+- [ ] Créer le dépôt GitHub et ajouter son URL au rapport
+- [ ] Déployer le frontend, l'API et la BDD et ajouter l'URL au rapport
+- [ ] Configurer SMTP si l'envoi réel d'e-mails est exigé
